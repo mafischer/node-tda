@@ -1,0 +1,22 @@
+{
+  "name": "tda-node",
+  "version": "1.0.0",
+  "description": "Library for accessing TDA Web API",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "certs": "openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout key.pem -out cert.pem -config req.cnf -sha256"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/hapi": "^20.1.0",
+    "@hapi/inert": "^6.0.3",
+    "axios": "^0.21.1",
+    "open": "^7.4.2"
+  },
+  "devDependencies": {
+    "chai": "^4.3.0",
+    "mocha": "^8.3.0"
+  }
+}
