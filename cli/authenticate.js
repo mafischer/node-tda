@@ -2,20 +2,26 @@
 'use strict';
 const yargs = require('yargs/yargs')
 const { hideBin } = require('yargs/helpers')
-const { authenticate } = require('../lib/authenticate');
+const { authenticate, generateTokens } = require('../lib/auth');
 
 const argv = yargs(hideBin(process.argv)).argv
 
-if (argv['CONSUMER_KEY'] === undefined) {
+const consumerKey = argv['CONSUMER_KEY'];
+
+if (consumerKey === undefined) {
   console.log('CONSUMER_KEY is required');
   process.exit(1);
 }
 
-console.log(argv['CONSUMER_KEY']);
+console.log(consumerKey);
 
 authenticate({
-  consumerKey: argv['CONSUMER_KEY']
-}).then((code) => {
-  console.log('authenticaton successful:')
-  console.log(code);
+  consumerKey
+}).then(async (grant) => {
+  console.log('authenticaton successful, retrieving tokens...');
+  const tokens = await generateTokens({
+    consumerKey,
+    grant
+  });
+  console.log(tokens);
 });
