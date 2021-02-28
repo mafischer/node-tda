@@ -1,5 +1,5 @@
-# TDA API
-Convenient wrapper for [TDA REST API](https://developer.tdameritrade.com/apis).
+# tda-node
+Convenient library for [TDA REST API](https://developer.tdameritrade.com/apis).
 
 ## Usage
 
