@@ -7,7 +7,8 @@
     "tda_authenticate": "cli/authenticate.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha --recursive test",
+    "coverage": "nyc npm run test",
     "certs": "openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout key.pem -out cert.pem -config req.cnf -sha256"
   },
   "author": "",
@@ -21,6 +22,9 @@
   },
   "devDependencies": {
     "chai": "^4.3.0",
-    "mocha": "^8.3.0"
+    "mocha": "^8.3.0",
+    "nyc": "^15.1.0",
+    "proxyquire": "^2.1.3",
+    "sinon": "^9.2.4"
   }
 }

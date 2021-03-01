@@ -1,0 +1,9 @@
+{
+  "all": true,
+  "extensions": ["*.js"],
+  "include": [
+    "lib/**",
+    "cli/**"
+  ],
+  "reporter": "lcov"
+}
