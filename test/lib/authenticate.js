@@ -2,7 +2,7 @@ const { expect } = require('chai');
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 
-const auth  = proxyquire('../lib/authenticate.js', {
+const auth  = proxyquire('../../lib/authenticate.js', {
   'open': () => {} 
 });
 
@@ -13,6 +13,10 @@ describe('Authenticate Test Suite', function () {
 
   before(() => {
     initStub = sandbox.stub(auth, 'init');
+  });
+
+  after(() => {
+    sandbox.restore();
   });
 
   beforeEach(async function () {

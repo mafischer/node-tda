@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict';
-const yargs = require('yargs/yargs')
-const { hideBin } = require('yargs/helpers')
+const yargs = require('yargs/yargs');
+const { hideBin } = require('yargs/helpers');
 const { authenticate, generateTokens } = require('../lib/authenticate');
 
 const argv = yargs(hideBin(process.argv)).argv
@@ -12,8 +12,6 @@ if (consumerKey === undefined) {
   console.log('CONSUMER_KEY is required');
   process.exit(1);
 }
-
-console.log(consumerKey);
 
 authenticate({
   consumerKey
