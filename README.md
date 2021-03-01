@@ -1,6 +1,10 @@
 # tda-node
 Convenient library for [TDA REST API](https://developer.tdameritrade.com/apis).
 
+## Status
+![nycrc config on GitHub](https://img.shields.io/nycrc/mafischer/tda-node?config=.nycrc&preferredThreshold=lines)
+
+
 ## Usage
 
 ### Install
