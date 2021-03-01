@@ -2,7 +2,7 @@
 'use strict';
 const yargs = require('yargs/yargs')
 const { hideBin } = require('yargs/helpers')
-const { authenticate, generateTokens } = require('../lib/auth');
+const { authenticate, generateTokens } = require('../lib/authenticate');
 
 const argv = yargs(hideBin(process.argv)).argv
 
