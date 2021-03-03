@@ -4,7 +4,6 @@ Convenient library for [TDA REST API](https://developer.tdameritrade.com/apis).
 ## Status
 ![nycrc config on GitHub](https://img.shields.io/nycrc/mafischer/tda-node?config=.nycrc&preferredThreshold=lines)
 
-
 ## Usage
 
 ### Install
@@ -19,21 +18,24 @@ For oauth login, run: `tda_authenticate --CONSUMER_KEY="<CONSUMER_KEY>"`
 
 #### async/await style
 ``` javascript
-const { authenticate, generateTokens, refreshToken, accounts } = require('node-tda');
+const { authenticate, generateTokens, refreshToken, getAccounts } = require('node-tda');
 
 async function auth(consumerKey) {
-  const grant = await authenticate();
+  const grant = await authenticate({
+    consumerKey
+  });
   const token = await generateTokens({
     consumerKey,
     grant
   });
-  return token
+  return token['access_token'];
 }
 
 const consumerKey = "someKey";
 auth(consumerKey)
   .then(async (token) => {
-    const data = await accounts({ token });
+    const accounts = await getAccounts({ token });
+    console.log(JSON.stringify(accounts));
   })
   .catch((err) => {
     console.log(err);
@@ -42,7 +44,7 @@ auth(consumerKey)
 
 #### callback style
 ``` javascript
-const { authenticate, generateTokens, refreshToken, accounts } = require('node-tda');
+const { authenticate, generateTokens, refreshToken, getAccounts } = require('node-tda');
 
 function auth(consumerKey, callback) {
   authenticate({
@@ -52,15 +54,15 @@ function auth(consumerKey, callback) {
       consumerKey,
       grant
     }, (token) => {
-      callback(null, token);
+      callback(null, token['access_token']);
     });
   });
 }
 
 const consumerKey = "someKey";
-auth(consumerKey, (token) +> {
-  accounts({ token }, (data) => {
-    console.log(data);
+auth(consumerKey, (err, token) +> {
+  getAccounts({ token }, (accounts) => {
+    console.log(JSON.stringify(accounts));
   });
 });
 ```
