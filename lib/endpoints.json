@@ -1,6 +1,0 @@
-{
-  "baseURI": "https://api.tdameritrade.com",
-  "accounts": "/v1/accounts",
-  "authentication": "/v1/oauth2/token",
-  "oauth": "https://auth.tdameritrade.com/oauth"
-}
