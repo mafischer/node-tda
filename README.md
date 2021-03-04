@@ -2,6 +2,7 @@
 Convenient library for [TDA REST API](https://developer.tdameritrade.com/apis).
 
 ## Status
+![CI](https://github.com/mafischer/tda-node/actions/workflows/node.js.yml/badge.svg)
 ![nycrc config on GitHub](https://img.shields.io/nycrc/mafischer/tda-node?config=.nycrc&preferredThreshold=lines)
 
 ## Usage
