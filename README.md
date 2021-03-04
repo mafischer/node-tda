@@ -3,7 +3,7 @@ Convenient library for [TDA REST API](https://developer.tdameritrade.com/apis).
 
 ## Status
 [![CI](https://github.com/mafischer/tda-node/actions/workflows/node.js.yml/badge.svg)](https://github.com/mafischer/tda-node/actions/workflows/node.js.yml)
-![nycrc config on GitHub](https://img.shields.io/nycrc/mafischer/tda-node?config=.nycrc&preferredThreshold=lines)
+[![nycrc config on GitHub](https://img.shields.io/nycrc/mafischer/tda-node?config=.nycrc&preferredThreshold=lines)](https://github.com/mafischer/tda-node/actions/workflows/node.js.yml)
 
 ## Usage
 
@@ -16,6 +16,22 @@ For convenience, you can run the certs script to generate self-signed certs. `np
 For oauth login, run: `tda_authenticate --CONSUMER_KEY="<CONSUMER_KEY>"`
 
 ### Lib
+
+#### API Functions
+All functions names echo their respective names found in the [TDA API](https://developer.tdameritrade.com/apis) documentation.
+
+i.e.:
+``` javascript
+// Get Accounts
+// https://developer.tdameritrade.com/account-access/apis/get/accounts-0
+const { getAccounts } = require('node-tda');
+
+// Place Order
+// https://developer.tdameritrade.com/account-access/apis/post/accounts/%7BaccountId%7D/orders-0
+const { placeOrder } = require('node-tda');
+```
+
+The function signatures `apiFunc(options, callback);` include an optional callback. When the callback is omitted, a promise is returned.
 
 #### async/await style
 ``` javascript
@@ -37,6 +53,14 @@ auth(consumerKey)
   .then(async (token) => {
     const accounts = await getAccounts({ token });
     console.log(JSON.stringify(accounts));
+    setInterval(async () => {
+      // refresh token
+      const newToken = refreshToken({
+        ...token,
+        consumerKey
+      });
+      console.log(JSON.stringify(newToken));
+    }, 1800000);
   })
   .catch((err) => {
     console.log(err);
@@ -61,9 +85,17 @@ function auth(consumerKey, callback) {
 }
 
 const consumerKey = "someKey";
-auth(consumerKey, (err, token) +> {
+auth(consumerKey, (err, token) => {
   getAccounts({ token }, (accounts) => {
     console.log(JSON.stringify(accounts));
+    setInterval(async () => {
+      // refresh token
+      const newToken = refreshToken({
+        ...token,
+        consumerKey
+      });
+      console.log(JSON.stringify(newToken));
+    }, 1800000);
   });
 });
 ```
