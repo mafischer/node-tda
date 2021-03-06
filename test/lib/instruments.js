@@ -41,7 +41,7 @@ describe('Instruments Test Suite', function () {
       axios200.resetHistory();
     });
 
-    it('should return data upon sucess', async () => {
+    it('should return data upon success', async () => {
       const instruments = proxyquire('../../lib/instruments', {
         // 'axios': axios200
         'axios': axiosSuccess
@@ -149,7 +149,7 @@ describe('Instruments Test Suite', function () {
       axios200.resetHistory();
     });
 
-    it('should return data upon sucess', async () => {
+    it('should return data upon success', async () => {
       const instruments = proxyquire('../../lib/instruments', {
         // 'axios': axios200
         'axios': axiosSuccess

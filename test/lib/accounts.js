@@ -41,7 +41,7 @@ describe('Accounts Test Suite', function () {
       axios200.resetHistory();
     });
 
-    it('should return data upon sucess', async () => {
+    it('should return data upon success', async () => {
       const accounts = proxyquire('../../lib/accounts', {
         // 'axios': axios200
         'axios': axiosSuccess
