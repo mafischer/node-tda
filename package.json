@@ -15,7 +15,19 @@
     "type": "git",
     "url": "https://github.com/mafischer/node-tda.git"
   },
-  "author": "",
+  "author": "Michael Fischer",
+  "keywords": [
+    "stock",
+    "nyse",
+    "nasdaq",
+    "tda",
+    "tdameritrade",
+    "td",
+    "trade",
+    "async",
+    "promise",
+    "callback"
+  ],
   "license": "ISC",
   "dependencies": {
     "@hapi/hapi": "^20.1.0",
