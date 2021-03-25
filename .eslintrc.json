@@ -6,6 +6,15 @@
   "rules": {
     "consistent-return": "off",
     "no-async-promise-executor": "off",
-    "max-len": ["error", { "ignoreComments": true, "ignoreUrls": true, "ignoreStrings": true, "code": 100, "tabWidth": 2 }]
+    "max-len": ["error", { "ignoreComments": true, "ignoreUrls": true, "ignoreStrings": true, "code": 100, "tabWidth": 2 }],
+    "require-jsdoc": ["error", {
+      "require": {
+          "FunctionDeclaration": true,
+          "MethodDefinition": false,
+          "ClassDeclaration": false,
+          "ArrowFunctionExpression": false,
+          "FunctionExpression": false
+      }
+  }]
   }
 }

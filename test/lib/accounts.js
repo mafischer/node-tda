@@ -1,3 +1,4 @@
+/* eslint-disable require-jsdoc */
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 const chai = require('chai');
