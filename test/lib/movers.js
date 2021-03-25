@@ -5,8 +5,8 @@ const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 
 const { expect } = chai;
-chai.use(dirtyChai);
 chai.use(chaiAsPromised);
+chai.use(dirtyChai);
 
 describe('Movers Test Suite', () => {
   let sandbox; let axiosSuccess; let axiosNotFound; let

@@ -1,8 +1,14 @@
 /* eslint-disable no-console */
 /* eslint-disable no-empty-function */
-const { expect } = require('chai');
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
+const chai = require('chai');
+const dirtyChai = require('dirty-chai');
+const chaiAsPromised = require('chai-as-promised');
+
+const { expect } = chai;
+chai.use(chaiAsPromised);
+chai.use(dirtyChai);
 
 const auth = proxyquire('../../lib/authenticate.js', {
   open: () => {},

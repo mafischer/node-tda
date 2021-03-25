@@ -2,8 +2,10 @@ const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 const chai = require('chai');
 const dirtyChai = require('dirty-chai');
+const chaiAsPromised = require('chai-as-promised');
 
 const { expect } = chai;
+chai.use(chaiAsPromised);
 chai.use(dirtyChai);
 
 describe('Accounts Test Suite', () => {

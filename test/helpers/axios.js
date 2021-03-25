@@ -1,10 +1,12 @@
-const proxyquire = require('proxyquire');
 const sinon = require('sinon');
+const proxyquire = require('proxyquire');
 const chai = require('chai');
+const dirtyChai = require('dirty-chai');
 const chaiAsPromised = require('chai-as-promised');
 
-chai.use(chaiAsPromised);
 const { expect } = chai;
+chai.use(chaiAsPromised);
+chai.use(dirtyChai);
 
 describe('Axios Helper Test Suite', () => {
   let sandbox; let axios; let

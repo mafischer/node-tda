@@ -1,4 +1,11 @@
-const { expect } = require('chai');
+const chai = require('chai');
+const dirtyChai = require('dirty-chai');
+const chaiAsPromised = require('chai-as-promised');
+
+const { expect } = chai;
+chai.use(chaiAsPromised);
+chai.use(dirtyChai);
+
 const transactionHistory = require('../../lib/transaction-history');
 
 describe('Transaction History Test Suite', () => {
