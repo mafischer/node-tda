@@ -1,15 +1,21 @@
-const { expect } = require('chai');
+const chai = require('chai');
+const dirtyChai = require('dirty-chai');
+const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 
-describe('Orders Test Suite', () => {
+const { expect } = chai;
+chai.use(dirtyChai);
+chai.use(chaiAsPromised);
 
-  let sandbox, axiosSuccess, axiosNotFound, axiosFailure;
+describe('Orders Test Suite', () => {
+  let sandbox; let axiosSuccess; let axiosNotFound; let
+    axiosFailure;
 
   before(() => {
     sandbox = sinon.createSandbox();
     axiosSuccess = sandbox.stub().resolves({
-      pizza: 'pepperoni'
+      pizza: 'pepperoni',
     });
     axiosNotFound = sandbox.stub().rejects(new Error('404: Account not found!'));
     axiosFailure = sandbox.stub().rejects(new Error('500: oops!'));
@@ -26,34 +32,32 @@ describe('Orders Test Suite', () => {
   });
 
   describe('cancelOrder Tests', () => {
-
     it('should return data upon success', async () => {
       const { cancelOrder } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosSuccess
-        }
+          axios: axiosSuccess,
+        },
       });
       const response = await cancelOrder({
         consumerKey: 'key',
         contractType: '$DJI',
         includeQuotes: '$DJI',
         strategy: '$DJI',
-        range: '$DJI'
+        range: '$DJI',
       });
       expect(response).to.deep.equal({
-        pizza: 'pepperoni'
+        pizza: 'pepperoni',
       });
-  
     });
 
     it('should return error upon 404', () => {
       const { cancelOrder } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosNotFound
-        }
+          axios: axiosNotFound,
+        },
       });
 
-      const func = cancelOrder.bind({
+      expect(cancelOrder({
         token: 'testToken',
         contractType: '$DJI',
         includeQuotes: '$DJI',
@@ -64,17 +68,15 @@ describe('Orders Test Suite', () => {
         interestRate: '$DJI',
         daysToExpiration: '$DJI',
         expMonth: '$DJI',
-        optionType: '$DJI'
-      });
-      expect(func).to.throw;
-  
+        optionType: '$DJI',
+      })).to.be.rejected();
     });
 
     it('should return error upon failure', (done) => {
       const { cancelOrder } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosFailure
-        }
+          axios: axiosFailure,
+        },
       });
       cancelOrder({
         token: 'testToken',
@@ -87,22 +89,21 @@ describe('Orders Test Suite', () => {
         interestRate: '$DJI',
         daysToExpiration: '$DJI',
         expMonth: '$DJI',
-        optionType: '$DJI'
-      }).then(data => {
-        expect(data).to.be.undefined;
+        optionType: '$DJI',
+      }).then((data) => {
+        expect(data).to.be.undefined();
         done();
-      }).catch(err => {
+      }).catch((err) => {
         expect(err.message).to.equal('500: oops!');
         done();
       });
-  
     });
 
     it('should callback upon success', (done) => {
       const { cancelOrder } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosSuccess
-        }
+          axios: axiosSuccess,
+        },
       });
       cancelOrder({
         token: 'testToken',
@@ -115,22 +116,21 @@ describe('Orders Test Suite', () => {
         interestRate: '$DJI',
         daysToExpiration: '$DJI',
         expMonth: '$DJI',
-        optionType: '$DJI'
+        optionType: '$DJI',
       }, (err, data) => {
-        expect(err).to.be.null;
+        expect(err).to.be.null();
         expect(data).to.deep.equal({
-          pizza: 'pepperoni'
+          pizza: 'pepperoni',
         });
         done();
       });
-  
     });
 
     it('should callback upon 404', (done) => {
       const { cancelOrder } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosNotFound
-        }
+          axios: axiosNotFound,
+        },
       });
       cancelOrder({
         token: 'testToken',
@@ -143,20 +143,19 @@ describe('Orders Test Suite', () => {
         interestRate: '$DJI',
         daysToExpiration: '$DJI',
         expMonth: '$DJI',
-        optionType: '$DJI'
+        optionType: '$DJI',
       }, (err, data) => {
-        expect(data).to.be.undefined;
+        expect(data).to.be.undefined();
         expect(err.message).to.equal('404: Account not found!');
         done();
       });
-  
     });
 
     it('should callback upon failure', (done) => {
       const { cancelOrder } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosFailure
-        }
+          axios: axiosFailure,
+        },
       });
       cancelOrder({
         token: 'testToken',
@@ -165,46 +164,42 @@ describe('Orders Test Suite', () => {
         interestRate: '$DJI',
         daysToExpiration: '$DJI',
         expMonth: '$DJI',
-        optionType: '$DJI'
+        optionType: '$DJI',
       }, (err, data) => {
-        expect(data).to.be.undefined;
+        expect(data).to.be.undefined();
         expect(err.message).to.equal('500: oops!');
         done();
       });
-  
     });
-
   });
 
   describe('getOrder Tests', () => {
-
     it('should return data upon success', async () => {
       const { getOrder } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosSuccess
-        }
+          axios: axiosSuccess,
+        },
       });
       const response = await getOrder({
         consumerKey: 'key',
         contractType: '$DJI',
         includeQuotes: '$DJI',
         strategy: '$DJI',
-        range: '$DJI'
+        range: '$DJI',
       });
       expect(response).to.deep.equal({
-        pizza: 'pepperoni'
+        pizza: 'pepperoni',
       });
-  
     });
 
     it('should return error upon 404', () => {
       const { getOrder } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosNotFound
-        }
+          axios: axiosNotFound,
+        },
       });
 
-      const func = getOrder.bind({
+      const func = getOrder({
         token: 'testToken',
         contractType: '$DJI',
         includeQuotes: '$DJI',
@@ -215,17 +210,16 @@ describe('Orders Test Suite', () => {
         interestRate: '$DJI',
         daysToExpiration: '$DJI',
         expMonth: '$DJI',
-        optionType: '$DJI'
+        optionType: '$DJI',
       });
-      expect(func).to.throw;
-  
+      expect(func).to.be.rejected();
     });
 
     it('should return error upon failure', (done) => {
       const { getOrder } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosFailure
-        }
+          axios: axiosFailure,
+        },
       });
       getOrder({
         token: 'testToken',
@@ -238,22 +232,21 @@ describe('Orders Test Suite', () => {
         interestRate: '$DJI',
         daysToExpiration: '$DJI',
         expMonth: '$DJI',
-        optionType: '$DJI'
-      }).then(data => {
-        expect(data).to.be.undefined;
+        optionType: '$DJI',
+      }).then((data) => {
+        expect(data).to.be.undefined();
         done();
-      }).catch(err => {
+      }).catch((err) => {
         expect(err.message).to.equal('500: oops!');
         done();
       });
-  
     });
 
     it('should callback upon success', (done) => {
       const { getOrder } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosSuccess
-        }
+          axios: axiosSuccess,
+        },
       });
       getOrder({
         token: 'testToken',
@@ -266,22 +259,21 @@ describe('Orders Test Suite', () => {
         interestRate: '$DJI',
         daysToExpiration: '$DJI',
         expMonth: '$DJI',
-        optionType: '$DJI'
+        optionType: '$DJI',
       }, (err, data) => {
-        expect(err).to.be.null;
+        expect(err).to.be.null();
         expect(data).to.deep.equal({
-          pizza: 'pepperoni'
+          pizza: 'pepperoni',
         });
         done();
       });
-  
     });
 
     it('should callback upon 404', (done) => {
       const { getOrder } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosNotFound
-        }
+          axios: axiosNotFound,
+        },
       });
       getOrder({
         token: 'testToken',
@@ -294,20 +286,19 @@ describe('Orders Test Suite', () => {
         interestRate: '$DJI',
         daysToExpiration: '$DJI',
         expMonth: '$DJI',
-        optionType: '$DJI'
+        optionType: '$DJI',
       }, (err, data) => {
-        expect(data).to.be.undefined;
+        expect(data).to.be.undefined();
         expect(err.message).to.equal('404: Account not found!');
         done();
       });
-  
     });
 
     it('should callback upon failure', (done) => {
       const { getOrder } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosFailure
-        }
+          axios: axiosFailure,
+        },
       });
       getOrder({
         token: 'testToken',
@@ -316,348 +307,250 @@ describe('Orders Test Suite', () => {
         interestRate: '$DJI',
         daysToExpiration: '$DJI',
         expMonth: '$DJI',
-        optionType: '$DJI'
+        optionType: '$DJI',
       }, (err, data) => {
-        expect(data).to.be.undefined;
+        expect(data).to.be.undefined();
         expect(err.message).to.equal('500: oops!');
         done();
       });
-  
     });
-
   });
 
   describe('getOrdersByPath Tests', () => {
-
     it('should return data upon success', async () => {
       const { getOrdersByPath } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosSuccess
-        }
+          axios: axiosSuccess,
+        },
       });
       const response = await getOrdersByPath({
         consumerKey: 'key',
-        contractType: '$DJI',
-        includeQuotes: '$DJI',
-        strategy: '$DJI',
-        range: '$DJI'
+        fromEnteredTime: '$DJI',
+        toEnteredTime: '$DJI',
+        status: '$DJI',
       });
       expect(response).to.deep.equal({
-        pizza: 'pepperoni'
+        pizza: 'pepperoni',
       });
-  
     });
 
     it('should return error upon 404', () => {
       const { getOrdersByPath } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosNotFound
-        }
+          axios: axiosNotFound,
+        },
       });
 
-      const func = getOrdersByPath.bind({
+      expect(getOrdersByPath({
         token: 'testToken',
-        contractType: '$DJI',
-        includeQuotes: '$DJI',
-        strategy: '$DJI',
-        range: '$DJI',
-        volatility: '$DJI',
-        underlyingPrice: '$DJI',
-        interestRate: '$DJI',
-        daysToExpiration: '$DJI',
-        expMonth: '$DJI',
-        optionType: '$DJI'
-      });
-      expect(func).to.throw;
-  
+        fromEnteredTime: '$DJI',
+        toEnteredTime: '$DJI',
+        status: '$DJI',
+      })).to.be.rejected();
     });
 
     it('should return error upon failure', (done) => {
       const { getOrdersByPath } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosFailure
-        }
+          axios: axiosFailure,
+        },
       });
       getOrdersByPath({
         token: 'testToken',
-        contractType: '$DJI',
-        includeQuotes: '$DJI',
-        strategy: '$DJI',
-        range: '$DJI',
-        volatility: '$DJI',
-        underlyingPrice: '$DJI',
-        interestRate: '$DJI',
-        daysToExpiration: '$DJI',
-        expMonth: '$DJI',
-        optionType: '$DJI'
-      }).then(data => {
-        expect(data).to.be.undefined;
+        fromEnteredTime: '$DJI',
+        toEnteredTime: '$DJI',
+        status: '$DJI',
+      }).then((data) => {
+        expect(data).to.be.undefined();
         done();
-      }).catch(err => {
+      }).catch((err) => {
         expect(err.message).to.equal('500: oops!');
         done();
       });
-  
     });
 
     it('should callback upon success', (done) => {
       const { getOrdersByPath } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosSuccess
-        }
+          axios: axiosSuccess,
+        },
       });
       getOrdersByPath({
         token: 'testToken',
-        contractType: '$DJI',
-        includeQuotes: '$DJI',
-        strategy: '$DJI',
-        range: '$DJI',
-        volatility: '$DJI',
-        underlyingPrice: '$DJI',
-        interestRate: '$DJI',
-        daysToExpiration: '$DJI',
-        expMonth: '$DJI',
-        optionType: '$DJI'
       }, (err, data) => {
-        expect(err).to.be.null;
+        expect(err).to.be.null();
         expect(data).to.deep.equal({
-          pizza: 'pepperoni'
+          pizza: 'pepperoni',
         });
         done();
       });
-  
     });
 
     it('should callback upon 404', (done) => {
       const { getOrdersByPath } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosNotFound
-        }
+          axios: axiosNotFound,
+        },
       });
       getOrdersByPath({
         token: 'testToken',
-        contractType: '$DJI',
-        includeQuotes: '$DJI',
-        strategy: '$DJI',
-        range: '$DJI',
-        volatility: '$DJI',
-        underlyingPrice: '$DJI',
-        interestRate: '$DJI',
-        daysToExpiration: '$DJI',
-        expMonth: '$DJI',
-        optionType: '$DJI'
       }, (err, data) => {
-        expect(data).to.be.undefined;
+        expect(data).to.be.undefined();
         expect(err.message).to.equal('404: Account not found!');
         done();
       });
-  
     });
 
     it('should callback upon failure', (done) => {
       const { getOrdersByPath } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosFailure
-        }
+          axios: axiosFailure,
+        },
       });
       getOrdersByPath({
         token: 'testToken',
-        volatility: '$DJI',
-        underlyingPrice: '$DJI',
-        interestRate: '$DJI',
-        daysToExpiration: '$DJI',
-        expMonth: '$DJI',
-        optionType: '$DJI'
       }, (err, data) => {
-        expect(data).to.be.undefined;
+        expect(data).to.be.undefined();
         expect(err.message).to.equal('500: oops!');
         done();
       });
-  
     });
-
   });
 
   describe('getOrdersByQuery Tests', () => {
-
     it('should return data upon success', async () => {
       const { getOrdersByQuery } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosSuccess
-        }
+          axios: axiosSuccess,
+        },
       });
       const response = await getOrdersByQuery({
-        consumerKey: 'key',
-        contractType: '$DJI',
-        includeQuotes: '$DJI',
-        strategy: '$DJI',
-        range: '$DJI'
+        token: 'token',
       });
       expect(response).to.deep.equal({
-        pizza: 'pepperoni'
+        pizza: 'pepperoni',
       });
-  
     });
 
     it('should return error upon 404', () => {
       const { getOrdersByQuery } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosNotFound
-        }
+          axios: axiosNotFound,
+        },
       });
 
-      const func = getOrdersByQuery.bind({
+      expect(getOrdersByQuery({
         token: 'testToken',
-        contractType: '$DJI',
-        includeQuotes: '$DJI',
-        strategy: '$DJI',
-        range: '$DJI',
-        volatility: '$DJI',
-        underlyingPrice: '$DJI',
-        interestRate: '$DJI',
-        daysToExpiration: '$DJI',
-        expMonth: '$DJI',
-        optionType: '$DJI'
-      });
-      expect(func).to.throw;
-  
+        accountId: '$DJI',
+        maxResults: '$DJI',
+        fromEnteredTime: '$DJI',
+        toEnteredTime: '$DJI',
+        status: '$DJI',
+      })).to.be.rejected();
     });
 
     it('should return error upon failure', (done) => {
       const { getOrdersByQuery } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosFailure
-        }
+          axios: axiosFailure,
+        },
       });
       getOrdersByQuery({
         token: 'testToken',
-        contractType: '$DJI',
-        includeQuotes: '$DJI',
-        strategy: '$DJI',
-        range: '$DJI',
-        volatility: '$DJI',
-        underlyingPrice: '$DJI',
-        interestRate: '$DJI',
-        daysToExpiration: '$DJI',
-        expMonth: '$DJI',
-        optionType: '$DJI'
-      }).then(data => {
-        expect(data).to.be.undefined;
+      }).then((data) => {
+        expect(data).to.be.undefined();
         done();
-      }).catch(err => {
+      }).catch((err) => {
         expect(err.message).to.equal('500: oops!');
         done();
       });
-  
     });
 
     it('should callback upon success', (done) => {
       const { getOrdersByQuery } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosSuccess
-        }
+          axios: axiosSuccess,
+        },
       });
       getOrdersByQuery({
         token: 'testToken',
-        contractType: '$DJI',
-        includeQuotes: '$DJI',
-        strategy: '$DJI',
-        range: '$DJI',
-        volatility: '$DJI',
-        underlyingPrice: '$DJI',
-        interestRate: '$DJI',
-        daysToExpiration: '$DJI',
-        expMonth: '$DJI',
-        optionType: '$DJI'
+        accountId: '$DJI',
+        maxResults: '$DJI',
+        fromEnteredTime: '$DJI',
+        toEnteredTime: '$DJI',
+        status: '$DJI',
       }, (err, data) => {
-        expect(err).to.be.null;
+        expect(err).to.be.null();
         expect(data).to.deep.equal({
-          pizza: 'pepperoni'
+          pizza: 'pepperoni',
         });
         done();
       });
-  
     });
 
     it('should callback upon 404', (done) => {
       const { getOrdersByQuery } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosNotFound
-        }
+          axios: axiosNotFound,
+        },
       });
       getOrdersByQuery({
         token: 'testToken',
-        contractType: '$DJI',
-        includeQuotes: '$DJI',
-        strategy: '$DJI',
-        range: '$DJI',
-        volatility: '$DJI',
-        underlyingPrice: '$DJI',
-        interestRate: '$DJI',
-        daysToExpiration: '$DJI',
-        expMonth: '$DJI',
-        optionType: '$DJI'
       }, (err, data) => {
-        expect(data).to.be.undefined;
+        expect(data).to.be.undefined();
         expect(err.message).to.equal('404: Account not found!');
         done();
       });
-  
     });
 
     it('should callback upon failure', (done) => {
       const { getOrdersByQuery } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosFailure
-        }
+          axios: axiosFailure,
+        },
       });
       getOrdersByQuery({
         token: 'testToken',
-        volatility: '$DJI',
-        underlyingPrice: '$DJI',
-        interestRate: '$DJI',
-        daysToExpiration: '$DJI',
-        expMonth: '$DJI',
-        optionType: '$DJI'
+        accountId: '$DJI',
+        maxResults: '$DJI',
+        fromEnteredTime: '$DJI',
+        toEnteredTime: '$DJI',
+        status: '$DJI',
       }, (err, data) => {
-        expect(data).to.be.undefined;
+        expect(data).to.be.undefined();
         expect(err.message).to.equal('500: oops!');
         done();
       });
-  
     });
-
   });
 
   describe('placeOrder Tests', () => {
-
     it('should return data upon success', async () => {
       const { placeOrder } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosSuccess
-        }
+          axios: axiosSuccess,
+        },
       });
       const response = await placeOrder({
         consumerKey: 'key',
         contractType: '$DJI',
         includeQuotes: '$DJI',
         strategy: '$DJI',
-        range: '$DJI'
+        range: '$DJI',
       });
       expect(response).to.deep.equal({
-        pizza: 'pepperoni'
+        pizza: 'pepperoni',
       });
-  
     });
 
     it('should return error upon 404', () => {
       const { placeOrder } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosNotFound
-        }
+          axios: axiosNotFound,
+        },
       });
 
-      const func = placeOrder.bind({
+      expect(placeOrder({
         token: 'testToken',
         contractType: '$DJI',
         includeQuotes: '$DJI',
@@ -668,17 +561,15 @@ describe('Orders Test Suite', () => {
         interestRate: '$DJI',
         daysToExpiration: '$DJI',
         expMonth: '$DJI',
-        optionType: '$DJI'
-      });
-      expect(func).to.throw;
-  
+        optionType: '$DJI',
+      })).to.be.rejected();
     });
 
     it('should return error upon failure', (done) => {
       const { placeOrder } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosFailure
-        }
+          axios: axiosFailure,
+        },
       });
       placeOrder({
         token: 'testToken',
@@ -691,22 +582,21 @@ describe('Orders Test Suite', () => {
         interestRate: '$DJI',
         daysToExpiration: '$DJI',
         expMonth: '$DJI',
-        optionType: '$DJI'
-      }).then(data => {
-        expect(data).to.be.undefined;
+        optionType: '$DJI',
+      }).then((data) => {
+        expect(data).to.be.undefined();
         done();
-      }).catch(err => {
+      }).catch((err) => {
         expect(err.message).to.equal('500: oops!');
         done();
       });
-  
     });
 
     it('should callback upon success', (done) => {
       const { placeOrder } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosSuccess
-        }
+          axios: axiosSuccess,
+        },
       });
       placeOrder({
         token: 'testToken',
@@ -719,22 +609,21 @@ describe('Orders Test Suite', () => {
         interestRate: '$DJI',
         daysToExpiration: '$DJI',
         expMonth: '$DJI',
-        optionType: '$DJI'
+        optionType: '$DJI',
       }, (err, data) => {
-        expect(err).to.be.null;
+        expect(err).to.be.null();
         expect(data).to.deep.equal({
-          pizza: 'pepperoni'
+          pizza: 'pepperoni',
         });
         done();
       });
-  
     });
 
     it('should callback upon 404', (done) => {
       const { placeOrder } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosNotFound
-        }
+          axios: axiosNotFound,
+        },
       });
       placeOrder({
         token: 'testToken',
@@ -747,20 +636,19 @@ describe('Orders Test Suite', () => {
         interestRate: '$DJI',
         daysToExpiration: '$DJI',
         expMonth: '$DJI',
-        optionType: '$DJI'
+        optionType: '$DJI',
       }, (err, data) => {
-        expect(data).to.be.undefined;
+        expect(data).to.be.undefined();
         expect(err.message).to.equal('404: Account not found!');
         done();
       });
-  
     });
 
     it('should callback upon failure', (done) => {
       const { placeOrder } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosFailure
-        }
+          axios: axiosFailure,
+        },
       });
       placeOrder({
         token: 'testToken',
@@ -769,46 +657,42 @@ describe('Orders Test Suite', () => {
         interestRate: '$DJI',
         daysToExpiration: '$DJI',
         expMonth: '$DJI',
-        optionType: '$DJI'
+        optionType: '$DJI',
       }, (err, data) => {
-        expect(data).to.be.undefined;
+        expect(data).to.be.undefined();
         expect(err.message).to.equal('500: oops!');
         done();
       });
-  
     });
-
   });
 
   describe('replaceOrder Tests', () => {
-
     it('should return data upon success', async () => {
       const { replaceOrder } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosSuccess
-        }
+          axios: axiosSuccess,
+        },
       });
       const response = await replaceOrder({
         consumerKey: 'key',
         contractType: '$DJI',
         includeQuotes: '$DJI',
         strategy: '$DJI',
-        range: '$DJI'
+        range: '$DJI',
       });
       expect(response).to.deep.equal({
-        pizza: 'pepperoni'
+        pizza: 'pepperoni',
       });
-  
     });
 
     it('should return error upon 404', () => {
       const { replaceOrder } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosNotFound
-        }
+          axios: axiosNotFound,
+        },
       });
 
-      const func = replaceOrder.bind({
+      expect(replaceOrder({
         token: 'testToken',
         contractType: '$DJI',
         includeQuotes: '$DJI',
@@ -819,17 +703,15 @@ describe('Orders Test Suite', () => {
         interestRate: '$DJI',
         daysToExpiration: '$DJI',
         expMonth: '$DJI',
-        optionType: '$DJI'
-      });
-      expect(func).to.throw;
-  
+        optionType: '$DJI',
+      })).to.be.rejected();
     });
 
     it('should return error upon failure', (done) => {
       const { replaceOrder } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosFailure
-        }
+          axios: axiosFailure,
+        },
       });
       replaceOrder({
         token: 'testToken',
@@ -842,22 +724,21 @@ describe('Orders Test Suite', () => {
         interestRate: '$DJI',
         daysToExpiration: '$DJI',
         expMonth: '$DJI',
-        optionType: '$DJI'
-      }).then(data => {
-        expect(data).to.be.undefined;
+        optionType: '$DJI',
+      }).then((data) => {
+        expect(data).to.be.undefined();
         done();
-      }).catch(err => {
+      }).catch((err) => {
         expect(err.message).to.equal('500: oops!');
         done();
       });
-  
     });
 
     it('should callback upon success', (done) => {
       const { replaceOrder } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosSuccess
-        }
+          axios: axiosSuccess,
+        },
       });
       replaceOrder({
         token: 'testToken',
@@ -870,22 +751,21 @@ describe('Orders Test Suite', () => {
         interestRate: '$DJI',
         daysToExpiration: '$DJI',
         expMonth: '$DJI',
-        optionType: '$DJI'
+        optionType: '$DJI',
       }, (err, data) => {
-        expect(err).to.be.null;
+        expect(err).to.be.null();
         expect(data).to.deep.equal({
-          pizza: 'pepperoni'
+          pizza: 'pepperoni',
         });
         done();
       });
-  
     });
 
     it('should callback upon 404', (done) => {
       const { replaceOrder } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosNotFound
-        }
+          axios: axiosNotFound,
+        },
       });
       replaceOrder({
         token: 'testToken',
@@ -898,20 +778,19 @@ describe('Orders Test Suite', () => {
         interestRate: '$DJI',
         daysToExpiration: '$DJI',
         expMonth: '$DJI',
-        optionType: '$DJI'
+        optionType: '$DJI',
       }, (err, data) => {
-        expect(data).to.be.undefined;
+        expect(data).to.be.undefined();
         expect(err.message).to.equal('404: Account not found!');
         done();
       });
-  
     });
 
     it('should callback upon failure', (done) => {
       const { replaceOrder } = proxyquire('../../lib/orders', {
         '../helpers': {
-          axios: axiosFailure
-        }
+          axios: axiosFailure,
+        },
       });
       replaceOrder({
         token: 'testToken',
@@ -920,15 +799,12 @@ describe('Orders Test Suite', () => {
         interestRate: '$DJI',
         daysToExpiration: '$DJI',
         expMonth: '$DJI',
-        optionType: '$DJI'
+        optionType: '$DJI',
       }, (err, data) => {
-        expect(data).to.be.undefined;
+        expect(data).to.be.undefined();
         expect(err.message).to.equal('500: oops!');
         done();
       });
-  
     });
-
   });
-
 });

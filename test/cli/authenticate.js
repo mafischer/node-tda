@@ -2,17 +2,15 @@ const proxyquire = require('proxyquire');
 const { expect } = require('chai');
 const sinon = require('sinon');
 
-describe('CLI Test Suite', function () {
-
+describe('CLI Test Suite', () => {
   const init = async () => {};
   const generateTokens = async () => ({
-    token: 'imma token'
+    token: 'imma token',
   });
-  const authenticate = async () => {
-    return await generateTokens();
-  };
+  const authenticate = async () => generateTokens();
 
-  let sandbox, authenticateSpy, initSpy, generateTokensSpy, exitStub, logStub;
+  let sandbox; let authenticateSpy; let initSpy; let generateTokensSpy; let exitStub; let
+    logStub;
 
   before(() => {
     sandbox = sinon.createSandbox();
@@ -36,45 +34,42 @@ describe('CLI Test Suite', function () {
   });
 
   it('should abort and exit', (done) => {
-
     proxyquire('../../cli/authenticate', {
       'yargs/yargs': () => ({
         argv: {
-          CONSUMER_KEY: undefined
-        }
+          CONSUMER_KEY: undefined,
+        },
       }),
       'yargs/helpers': {
-        hideBin() {}
+        hideBin() {},
       },
       '../lib/authenticate': {
         init: initSpy,
         generateTokens: generateTokensSpy,
-        authenticate: authenticateSpy
-      }
+        authenticate: authenticateSpy,
+      },
     });
 
     expect(exitStub.calledOnce).to.equal(true);
     expect(logStub.calledOnce).to.equal(true);
     done();
-    
   });
 
   it('should authenticate and return a token', (done) => {
-
     proxyquire('../../cli/authenticate', {
       'yargs/yargs': () => ({
         argv: {
-          CONSUMER_KEY: 'test'
-        }
+          CONSUMER_KEY: 'test',
+        },
       }),
       'yargs/helpers': {
-        hideBin() {}
+        hideBin() {},
       },
       '../lib/authenticate': {
         init: initSpy,
         generateTokens: generateTokensSpy,
-        authenticate: authenticateSpy
-      }
+        authenticate: authenticateSpy,
+      },
     });
 
     expect(authenticateSpy.called).to.equal(true);
@@ -84,6 +79,5 @@ describe('CLI Test Suite', function () {
       expect(logStub.calledTwice).to.equal(true);
       done();
     }, 20);
-    
   });
 });

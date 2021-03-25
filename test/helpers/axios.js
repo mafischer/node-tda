@@ -1,17 +1,20 @@
-const { expect } = require('chai');
-const sinon = require('sinon');
 const proxyquire = require('proxyquire');
-const ah = require('../../helpers');
+const sinon = require('sinon');
+const chai = require('chai');
+const chaiAsPromised = require('chai-as-promised');
+
+chai.use(chaiAsPromised);
+const { expect } = chai;
 
 describe('Axios Helper Test Suite', () => {
-
-  let sandbox, axios, axiosHelper;
+  let sandbox; let axios; let
+    helper;
 
   before(() => {
     sandbox = sinon.createSandbox();
     axios = sandbox.stub();
-    helper = proxyquire('../../helpers/axios', {
-      'axios': axios
+    helper = proxyquire('../../helpers', {
+      axios,
     });
   });
 
@@ -24,33 +27,30 @@ describe('Axios Helper Test Suite', () => {
   });
 
   describe('axios Tests', () => {
-
     it('should return data upon success', async () => {
       axios.resolves({
         status: 200,
+        statusText: 'success',
         data: {
-          pizza: 'pepperoni'
-        }
+          pizza: 'pepperoni',
+        },
       });
-      const response = await helper.axios();
-      expect(response).to.deep.equal({
-        pizza: 'pepperoni'
+      expect(helper.axios()).to.eventually.deep.equal({
+        pizza: 'pepperoni',
       });
-  
     });
 
-    it('should return 404', () => {
+    it('should reject with 404 error', () => {
       axios.resolves({
         status: 404,
-        data: {}
+        statusText: 'Not Found',
       });
-      expect(helper.axios.bind({})).to.throw;
+      expect(helper.axios({})).to.be.rejectedWith('404: Not Found');
     });
 
     it('should return error upon failure', () => {
       axios.rejects(new Error('500'));
-      expect(helper.axios.bind({})).to.throw;
+      expect(helper.axios({})).to.be.rejectedWith('500');
     });
-
   });
 });

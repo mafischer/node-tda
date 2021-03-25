@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-'use strict';
+
 const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
 const { authenticate, generateTokens } = require('../lib/authenticate');
 
-const argv = yargs(hideBin(process.argv)).argv
+const { argv } = yargs(hideBin(process.argv));
 
-const consumerKey = argv['CONSUMER_KEY'];
+const consumerKey = argv.CONSUMER_KEY;
 
 if (consumerKey === undefined) {
   console.log('CONSUMER_KEY is required');
@@ -14,12 +14,12 @@ if (consumerKey === undefined) {
 }
 
 authenticate({
-  consumerKey
+  consumerKey,
 }).then(async (grant) => {
   console.log('authenticaton successful, retrieving tokens...');
   const tokens = await generateTokens({
     consumerKey,
-    grant
+    grant,
   });
   console.log(tokens);
 });

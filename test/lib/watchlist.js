@@ -1,8 +1,7 @@
 const { expect } = require('chai');
-const watchlist = require('../../lib/watchlist')
+const watchlist = require('../../lib/watchlist');
 
 describe('Watchlist Test Suite', () => {
-
   it('should throw not implemented for createWatchlist', () => {
     expect(watchlist.createWatchlist.bind()).to.throw('Not Implemented!');
   });
@@ -22,5 +21,4 @@ describe('Watchlist Test Suite', () => {
   it('should throw not implemented for getWatchlistForSingleAccount', () => {
     expect(watchlist.getWatchlistForSingleAccount.bind()).to.throw('Not Implemented!');
   });
-
 });

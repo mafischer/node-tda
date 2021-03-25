@@ -1,14 +1,17 @@
+/* eslint-disable no-console */
+/* eslint-disable no-empty-function */
 const { expect } = require('chai');
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
 
-const auth  = proxyquire('../../lib/authenticate.js', {
-  'open': () => {} 
+const auth = proxyquire('../../lib/authenticate.js', {
+  open: () => {},
 });
 
-describe('Authenticate Test Suite', function () {
-
+describe('Authenticate Test Suite', () => {
   const sandbox = sinon.createSandbox();
+
+  let consoleLogStub;
 
   before(() => {
     consoleLogStub = sandbox.stub(console, 'log');
@@ -18,63 +21,59 @@ describe('Authenticate Test Suite', function () {
     sandbox.restore();
   });
 
-  beforeEach(async function () {
+  beforeEach(async () => {
     consoleLogStub.reset();
   });
 
-  describe('authenticate tests', function () {
+  describe('authenticate tests', () => {
     let initStub;
 
     before(() => {
       initStub = sandbox.stub(auth, 'init');
     });
 
-    beforeEach(async function () {
+    beforeEach(async () => {
       initStub.reset();
     });
 
     it('should return a promise when called without a callback', async () => {
+      const token = {
+        expires_in: 1800,
+        refresh_token: '',
+        access_token: '',
+      };
 
-      const token =  {
-        expires_in: 1800,
-        refresh_token: '',
-        access_token: ''
-      }
-  
       initStub.yields(null, token);
-  
+
       const promise = auth.authenticate({
-        consumerKey: '1234567890'
+        consumerKey: '1234567890',
       });
-  
+
       expect(promise instanceof Promise).to.equal(true);
-  
     });
-  
+
     it('should resolve a token', async () => {
-  
-      const token =  {
+      const token = {
         expires_in: 1800,
         refresh_token: '',
-        access_token: ''
-      }
-    
+        access_token: '',
+      };
+
       initStub.yields(null, token);
-    
+
       const tkn = await auth.authenticate({
-        consumerKey: '1234567890'
+        consumerKey: '1234567890',
       });
-    
+
       expect(tkn).to.deep.equal(token);
-    
     });
 
     it('should callback on async init failure', (done) => {
       initStub.rejects(new Error('chicago style'));
       auth.authenticate({
-        consumerKey: '1234567890'
+        consumerKey: '1234567890',
       }, (err, tkn) => {
-        expect(tkn).to.be.undefined;
+        expect(tkn).to.be.undefined();
         expect(err.message).to.equal('chicago style');
         done();
       });
@@ -83,53 +82,51 @@ describe('Authenticate Test Suite', function () {
     it('should callback on init failure', (done) => {
       initStub.yields(new Error('chicago style'));
       auth.authenticate({
-        consumerKey: '1234567890'
+        consumerKey: '1234567890',
       }, (err, tkn) => {
-        expect(tkn).to.be.undefined;
+        expect(tkn).to.be.undefined();
         expect(err.message).to.equal('chicago style');
         done();
       });
     });
-  
+
     it('should callback with a token', (done) => {
-  
-      const token =  {
+      const token = {
         expires_in: 1800,
         refresh_token: '',
-        access_token: ''
-      }
-    
+        access_token: '',
+      };
+
       initStub.yields(null, token);
-    
+
       auth.authenticate({
-        consumerKey: '1234567890'
+        consumerKey: '1234567890',
       }, (err, tkn) => {
-        expect(err).to.be.null;
+        expect(err).to.be.null();
         expect(tkn).to.deep.equal(token);
         done();
       });
-    
     });
-
   });
 
   describe('init tests', () => {
-    let existsSyncStub, authenticate;
+    let existsSyncStub; let
+      authenticate;
 
     before(() => {
       existsSyncStub = sandbox.stub();
 
       authenticate = proxyquire('../../lib/authenticate.js', {
-        'fs': {
+        fs: {
           existsSync: existsSyncStub,
           readFileSync() {
             return '';
-          }
+          },
         },
-        'https': {
+        https: {
           createServer() {
-  
-          }
+
+          },
         },
         '@hapi/hapi': {
           server() {
@@ -137,13 +134,12 @@ describe('Authenticate Test Suite', function () {
               route() {},
               async start() {},
               info: {
-                uri: 'imma uri'
-              }
-            }
-          }
-        }
+                uri: 'imma uri',
+              },
+            };
+          },
+        },
       });
-
     });
 
     beforeEach(() => {
@@ -151,51 +147,46 @@ describe('Authenticate Test Suite', function () {
     });
 
     it('should init without error', async () => {
-  
       try {
         const empty = await authenticate.init({
           key: '',
           cert: '',
-          authCb: () => {}
+          authCb: () => {},
         });
-        expect(consoleLogStub.calledOnce).to.be.true;
-        expect(empty).to.be.undefined;
-      } catch(err) {
-        expect(err).to.be.undefined;
+        expect(consoleLogStub.calledOnce).to.be.true();
+        expect(empty).to.be.undefined();
+      } catch (err) {
+        expect(err).to.be.undefined();
       }
-    
     });
 
     it('should init with certificates', async () => {
-  
       existsSyncStub.returns(true);
       try {
         const empty = await authenticate.init({
           key: 'asdf',
           cert: 'asdf',
-          authCb: () => {}
+          authCb: () => {},
         });
-        expect(consoleLogStub.calledOnce).to.be.true;
-        expect(empty).to.be.undefined;
-      } catch(err) {
-        expect(err).to.be.undefined;
+        expect(consoleLogStub.calledOnce).to.be.true();
+        expect(empty).to.be.undefined();
+      } catch (err) {
+        expect(err).to.be.undefined();
       }
-    
     });
 
     it('should call the handler callback', async (done) => {
-
       existsSyncStub.returns(true);
 
       const { init } = proxyquire('../../lib/authenticate.js', {
-        'fs': {
+        fs: {
           existsSync: existsSyncStub,
           readFileSync() {
             return '';
-          }
+          },
         },
-        'https': {
-          createServer() {}
+        https: {
+          createServer() {},
         },
         '@hapi/hapi': {
           server() {
@@ -204,20 +195,20 @@ describe('Authenticate Test Suite', function () {
               route({ handler }) {
                 handler({
                   query: {
-                    code: 'pizza'
-                  }
+                    code: 'pizza',
+                  },
                 });
               },
               async start() {},
               info: {
-                uri: 'imma uri'
-              }
-            }
-          }
-        }
+                uri: 'imma uri',
+              },
+            };
+          },
+        },
       });
-  
-      init({}, (code) => {
+
+      init({}, () => {
         console.log('here');
         done();
       });
@@ -225,109 +216,103 @@ describe('Authenticate Test Suite', function () {
   });
 
   describe('generateTokens tests', () => {
-    let authenticate, axiosStub;
+    let authenticate; let
+      axiosStub;
 
     before(() => {
       axiosStub = sandbox.stub();
       authenticate = proxyquire('../../lib/authenticate.js', {
-        'axios': axiosStub
+        axios: axiosStub,
       });
     });
 
     beforeEach(() => {
       axiosStub.reset();
-    })
+    });
 
     it('should generate tokens without error', async () => {
-      
-      axiosStub.resolves({data:'pizza'});
+      axiosStub.resolves({ data: 'pizza' });
       try {
         const token = await authenticate.generateTokens({
-          consumerKey: 'emptyString'
+          consumerKey: 'emptyString',
         });
         expect(token).to.equal('pizza');
-      } catch(err) {
-        expect(err).to.be.undefined;
+      } catch (err) {
+        expect(err).to.be.undefined();
       }
-    
     });
 
     it('should generate tokens and call callback', (done) => {
-      axiosStub.resolves({data:'pizza'});
+      axiosStub.resolves({ data: 'pizza' });
       authenticate.generateTokens({
-        consumerKey: 'emptyString'
+        consumerKey: 'emptyString',
       }, (err, token) => {
         expect(token).to.equal('pizza');
-        expect(err).to.be.null;
+        expect(err).to.be.null();
         done();
       });
-    
     });
 
     it('should reject on error', async () => {
-
       axiosStub.rejects(new Error('thin crust'));
 
       try {
         const token = await authenticate.generateTokens({
-          consumerKey: 'emptyString'
+          consumerKey: 'emptyString',
         });
-        expect(token).to.be.undefined;
-      } catch(err) {
+        expect(token).to.be.undefined();
+      } catch (err) {
         expect(err.message).to.equal('thin crust');
       }
-    
     });
 
     it('should callback with error', (done) => {
-
       axiosStub.rejects(new Error('deep dish'));
 
       authenticate.generateTokens({
-        consumerKey: 'emptyString'
+        consumerKey: 'emptyString',
       }, (err, token) => {
-        expect(token).to.be.undefined;
+        expect(token).to.be.undefined();
         expect(err.message).to.equal('deep dish');
         done();
       });
-    
     });
-
   });
 
   describe('refreshToken tests', () => {
-    let authenticate, axiosStub;
+    let authenticate; let
+      axiosStub;
 
     before(() => {
       axiosStub = sandbox.stub();
       authenticate = proxyquire('../../lib/authenticate.js', {
-        'axios': axiosStub
+        axios: axiosStub,
       });
     });
 
     beforeEach(() => {
       axiosStub.reset();
-    })
+    });
 
     it('should refresh token without error', async () => {
-      axiosStub.resolves({data:'pizza'});
+      axiosStub.resolves({ data: 'pizza' });
       try {
         const token = await authenticate.refreshToken({
-          consumerKey: 'emptyString'
+          consumerKey: 'emptyString',
         });
         expect(token).to.equal('pizza');
-      } catch(err) {
-        expect(err).to.be.undefined;
+      } catch (err) {
+        expect(err).to.be.undefined();
       }
     });
 
     it('should refresh token and call callback', (done) => {
-      axiosStub.resolves({data:'pizza'});
+      axiosStub.resolves({ data: 'pizza' });
       authenticate.refreshToken({
-        consumerKey: 'emptyString'
+        consumerKey: 'emptyString',
       }, (err, token) => {
         expect(token).to.equal('pizza');
-        expect(err).to.be.null;
+        expect(err).to.be.null();
         done();
       });
     });
@@ -336,10 +321,10 @@ describe('Authenticate Test Suite', function () {
       axiosStub.rejects(new Error('thin crust'));
       try {
         const token = await authenticate.refreshToken({
-          consumerKey: 'emptyString'
+          consumerKey: 'emptyString',
         });
-        expect(token).to.be.undefined;
-      } catch(err) {
+        expect(token).to.be.undefined();
+      } catch (err) {
         expect(err.message).to.equal('thin crust');
       }
     });
@@ -347,15 +332,12 @@ describe('Authenticate Test Suite', function () {
     it('should callback with error', (done) => {
       axiosStub.rejects(new Error('deep dish'));
       authenticate.refreshToken({
-        consumerKey: 'emptyString'
+        consumerKey: 'emptyString',
       }, (err, token) => {
-        expect(token).to.be.undefined;
+        expect(token).to.be.undefined();
         expect(err.message).to.equal('deep dish');
         done();
       });
     });
-
   });
-
 });
-      

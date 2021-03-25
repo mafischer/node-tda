@@ -1,10 +1,8 @@
 const { expect } = require('chai');
 const lib = require('../../lib');
 
-describe('Lib Test Suite', function () {
-
+describe('Lib Test Suite', () => {
   it('should export each function', () => {
-    
     expect(typeof lib.getAccounts).to.equal('function');
     expect(typeof lib.getAccount).to.equal('function');
     expect(typeof lib.init).to.equal('function');
@@ -43,6 +41,4 @@ describe('Lib Test Suite', function () {
     expect(typeof lib.getWatchlistsForMultipleAccounts).to.equal('function');
     expect(typeof lib.getWatchlistForSingleAccount).to.equal('function');
   });
-
 });
-      

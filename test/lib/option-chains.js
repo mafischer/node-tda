@@ -1,16 +1,21 @@
-const { expect } = require('chai');
+const chai = require('chai');
+const dirtyChai = require('dirty-chai');
+const chaiAsPromised = require('chai-as-promised');
 const sinon = require('sinon');
 const proxyquire = require('proxyquire');
-const movers = require('../../lib/option-chains');
+
+const { expect } = chai;
+chai.use(dirtyChai);
+chai.use(chaiAsPromised);
 
 describe('Option Chains Test Suite', () => {
-  
-  let sandbox, axiosSuccess, axiosNotFound, axiosFailure;
+  let sandbox; let axiosSuccess; let axiosNotFound; let
+    axiosFailure;
 
   before(() => {
     sandbox = sinon.createSandbox();
     axiosSuccess = sandbox.stub().resolves({
-      pizza: 'pepperoni'
+      pizza: 'pepperoni',
     });
     axiosNotFound = sandbox.stub().rejects(new Error('404: Account not found!'));
     axiosFailure = sandbox.stub().rejects(new Error('500: oops!'));
@@ -27,34 +32,32 @@ describe('Option Chains Test Suite', () => {
   });
 
   describe('getOptionChain Tests', () => {
-
     it('should return data upon success', async () => {
       const { getOptionChain } = proxyquire('../../lib/option-chains', {
         '../helpers': {
-          axios: axiosSuccess
-        }
+          axios: axiosSuccess,
+        },
       });
       const response = await getOptionChain({
         consumerKey: 'key',
         contractType: '$DJI',
         includeQuotes: '$DJI',
         strategy: '$DJI',
-        range: '$DJI'
+        range: '$DJI',
       });
       expect(response).to.deep.equal({
-        pizza: 'pepperoni'
+        pizza: 'pepperoni',
       });
-  
     });
 
     it('should return error upon 404', () => {
       const { getOptionChain } = proxyquire('../../lib/option-chains', {
         '../helpers': {
-          axios: axiosNotFound
-        }
+          axios: axiosNotFound,
+        },
       });
 
-      const func = getOptionChain.bind({
+      expect(getOptionChain({
         token: 'testToken',
         contractType: '$DJI',
         includeQuotes: '$DJI',
@@ -65,17 +68,15 @@ describe('Option Chains Test Suite', () => {
         interestRate: '$DJI',
         daysToExpiration: '$DJI',
         expMonth: '$DJI',
-        optionType: '$DJI'
-      });
-      expect(func).to.throw;
-  
+        optionType: '$DJI',
+      })).to.be.rejected();
     });
 
     it('should return error upon failure', (done) => {
       const { getOptionChain } = proxyquire('../../lib/option-chains', {
         '../helpers': {
-          axios: axiosFailure
-        }
+          axios: axiosFailure,
+        },
       });
       getOptionChain({
         token: 'testToken',
@@ -88,22 +89,21 @@ describe('Option Chains Test Suite', () => {
         interestRate: '$DJI',
         daysToExpiration: '$DJI',
         expMonth: '$DJI',
-        optionType: '$DJI'
-      }).then(data => {
-        expect(data).to.be.undefined;
+        optionType: '$DJI',
+      }).then((data) => {
+        expect(data).to.be.undefined();
         done();
-      }).catch(err => {
+      }).catch((err) => {
         expect(err.message).to.equal('500: oops!');
         done();
       });
-  
     });
 
     it('should callback upon success', (done) => {
       const { getOptionChain } = proxyquire('../../lib/option-chains', {
         '../helpers': {
-          axios: axiosSuccess
-        }
+          axios: axiosSuccess,
+        },
       });
       getOptionChain({
         token: 'testToken',
@@ -116,22 +116,21 @@ describe('Option Chains Test Suite', () => {
         interestRate: '$DJI',
         daysToExpiration: '$DJI',
         expMonth: '$DJI',
-        optionType: '$DJI'
+        optionType: '$DJI',
       }, (err, data) => {
-        expect(err).to.be.null;
+        expect(err).to.be.null();
         expect(data).to.deep.equal({
-          pizza: 'pepperoni'
+          pizza: 'pepperoni',
         });
         done();
       });
-  
     });
 
     it('should callback upon 404', (done) => {
       const { getOptionChain } = proxyquire('../../lib/option-chains', {
         '../helpers': {
-          axios: axiosNotFound
-        }
+          axios: axiosNotFound,
+        },
       });
       getOptionChain({
         token: 'testToken',
@@ -144,20 +143,19 @@ describe('Option Chains Test Suite', () => {
         interestRate: '$DJI',
         daysToExpiration: '$DJI',
         expMonth: '$DJI',
-        optionType: '$DJI'
+        optionType: '$DJI',
       }, (err, data) => {
-        expect(data).to.be.undefined;
+        expect(data).to.be.undefined();
         expect(err.message).to.equal('404: Account not found!');
         done();
       });
-  
     });
 
     it('should callback upon failure', (done) => {
       const { getOptionChain } = proxyquire('../../lib/option-chains', {
         '../helpers': {
-          axios: axiosFailure
-        }
+          axios: axiosFailure,
+        },
       });
       getOptionChain({
         token: 'testToken',
@@ -166,14 +164,12 @@ describe('Option Chains Test Suite', () => {
         interestRate: '$DJI',
         daysToExpiration: '$DJI',
         expMonth: '$DJI',
-        optionType: '$DJI'
+        optionType: '$DJI',
       }, (err, data) => {
-        expect(data).to.be.undefined;
+        expect(data).to.be.undefined();
         expect(err.message).to.equal('500: oops!');
         done();
       });
-  
     });
-
   });
 });

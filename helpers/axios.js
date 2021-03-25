@@ -9,5 +9,5 @@ async function axios(options) {
 }
 
 module.exports = {
-  axios
+  axios,
 };
