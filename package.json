@@ -9,7 +9,7 @@
   "scripts": {
     "coverage": "nyc npm run test",
     "certs": "openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout key.pem -out cert.pem -config req.cnf -sha256",
-    "lint": "eslint --fix --quiet .",
+    "lint": "eslint --fix .",
     "test": "mocha --recursive test"
   },
   "repository": {
