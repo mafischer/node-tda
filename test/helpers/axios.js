@@ -13,7 +13,7 @@ describe('Axios Helper Test Suite', () => {
   before(() => {
     sandbox = sinon.createSandbox();
     axios = sandbox.stub();
-    helper = proxyquire('../../helpers', {
+    helper = proxyquire('../../helpers/axios', {
       axios,
     });
   });
@@ -38,6 +38,17 @@ describe('Axios Helper Test Suite', () => {
       expect(helper.axios()).to.eventually.deep.equal({
         pizza: 'pepperoni',
       });
+    });
+
+    it('should reject with 100 error', async () => {
+      axios.resolves({
+        status: 100,
+        statusText: 'Continue',
+        data: {
+          pizza: 'pepperoni',
+        },
+      });
+      expect(helper.axios({})).to.be.rejectedWith('100: Continue');
     });
 
     it('should reject with 404 error', () => {

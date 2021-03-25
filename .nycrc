@@ -3,7 +3,8 @@
   "extensions": ["*.js"],
   "include": [
     "lib/**",
-    "cli/**"
+    "cli/**",
+    "helpers/**"
   ],
   "reporter": "lcov",
   "check-coverage": true,
