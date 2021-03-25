@@ -2,8 +2,12 @@
 Convenient library for [TDA REST API](https://developer.tdameritrade.com/apis).
 
 ## Status
-[![CI](https://github.com/mafischer/tda-node/actions/workflows/node.js.yml/badge.svg)](https://github.com/mafischer/tda-node/actions/workflows/node.js.yml)
-[![nycrc config on GitHub](https://img.shields.io/nycrc/mafischer/tda-node?config=.nycrc&preferredThreshold=lines)](https://github.com/mafischer/tda-node/actions/workflows/node.js.yml)
+![GitHub package.json version](https://img.shields.io/github/package-json/v/mafischer/node-tda)
+[![CI](https://github.com/mafischer/tda-node/actions/workflows/node.js.yml/badge.svg)](https://github.com/mafischer/node-tda/actions/workflows/node.js.yml)
+[![nycrc config on GitHub](https://img.shields.io/nycrc/mafischer/tda-node?config=.nycrc&preferredThreshold=lines)](https://github.com/mafischer/node-tda/actions/workflows/node.js.yml)
+[![issues](https://img.shields.io/github/issues/mafischer/node-tda)](https://github.com/mafischer/node-tda/issues)
+[![issues](https://img.shields.io/github/stars/mafischer/node-tda?style=social)](https://github.com/mafischer/node-tda/stargazers)
+
 
 ## Usage
 
