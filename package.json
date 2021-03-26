@@ -25,6 +25,7 @@
     "tdameritrade",
     "td",
     "trade",
+    "api",
     "async",
     "promise",
     "callback"
