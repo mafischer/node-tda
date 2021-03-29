@@ -10,7 +10,8 @@
     "coverage": "nyc npm run test",
     "certs": "openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout key.pem -out cert.pem -config req.cnf -sha256",
     "lint": "eslint --fix .",
-    "test": "mocha --recursive test"
+    "test": "mocha --recursive test",
+    "postinstall": "helpers/certs.js"
   },
   "repository": {
     "type": "git",
@@ -37,6 +38,7 @@
     "joi": "^17.4.0",
     "open": "^7.4.2",
     "qs": "^6.9.6",
+    "shelljs": "^0.8.4",
     "yargs": "^16.2.0"
   },
   "devDependencies": {

@@ -1,4 +1,4 @@
-# tda-node
+# node-tda
 Convenient library for [TDA REST API](https://developer.tdameritrade.com/apis).
 
 ## Status
@@ -11,18 +11,25 @@ Convenient library for [TDA REST API](https://developer.tdameritrade.com/apis).
 
 ## Usage
 
+### Prerequisites
+1. Follow these [instructions](https://developer.tdameritrade.com/content/getting-started) to create a tda developer account and app. Set your app redirect uri to `https://localhost:8443/`.
+2. Take note of the consumer key generated for your app.
+3. Install openssl on your system if you want to use the CLI to aid in retrieving your tokens.
+
 ### Install
 - `npm install node-tda`
 
 ### CLI
-For convenience, you can run the certs script to generate self-signed certs. `npm run certs`
+For CLI usage, also install node-tda as a global package `npm install -g node-tda`
+
+The cli uses an https server to retrieve access tokens from the tda oauth login. For convenience, self-signed certs are generated automatically upon install. If your system is missing `openssl` from its path, the certs will not be generated and the cli won't work.
 
 For oauth login, run: `tda_authenticate --CONSUMER_KEY="<CONSUMER_KEY>"`
 
 ### Lib
 
 #### API Functions
-All functions names echo their respective names found in the [TDA API](https://developer.tdameritrade.com/apis) documentation.
+All functions names are a camelCase reflection their respective names found in the [TDA API](https://developer.tdameritrade.com/apis) documentation. As of the writing of this document, all of the functions published in TDA's web api have been implemented.
 
 i.e.:
 ``` javascript
@@ -37,7 +44,7 @@ const { placeOrder } = require('node-tda');
 
 The function signatures `apiFunc(options, callback);` include an optional callback. When the callback is omitted, a promise is returned.
 
-#### async/await style
+#### **Using Promises:**
 ``` javascript
 const { authenticate, generateTokens, refreshToken, getAccounts } = require('node-tda');
 
@@ -71,7 +78,7 @@ auth(consumerKey)
   });
 ```
 
-#### callback style
+#### **Using Callbacks:**
 ``` javascript
 const { authenticate, generateTokens, refreshToken, getAccounts } = require('node-tda');
 
