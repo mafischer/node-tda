@@ -18,13 +18,15 @@ Convenient library for [TDA REST API](https://developer.tdameritrade.com/apis).
 
 ### Install
 - `npm install node-tda`
+- `npm install node-tda --no-optional` if you don't need puppeteer for oauth authentication in a headless browser
 
 ### CLI
 For CLI usage, also install node-tda as a global package `npm install -g node-tda`
 
 The cli uses an https server to retrieve access tokens from the tda oauth login. For convenience, self-signed certs are generated automatically upon install. If your system is missing `openssl` from its path, the certs will not be generated and the cli won't work.
 
-For oauth login, run: `tda_authenticate --CONSUMER_KEY="<CONSUMER_KEY>"`
+For headless oauth login, run: `tda_authenticate --CONSUMER_KEY='<CONSUMER_KEY>' --UID='<userid>' --PW='<password>'`
+For normal oauth login, run: `tda_authenticate --CONSUMER_KEY='<CONSUMER_KEY>'`
 
 ### Lib
 
