@@ -10,17 +10,53 @@ const { expect } = chai;
 chai.use(chaiAsPromised);
 chai.use(dirtyChai);
 
-const auth = proxyquire('../../lib/authenticate.js', {
-  open: () => {},
-});
-
 describe('Authenticate Test Suite', () => {
-  const sandbox = sinon.createSandbox();
-
   let consoleLogStub;
+  let auth;
+  let sandbox;
+  let puppeteer;
+  let rlp;
+  let openStub;
+  let close;
 
   before(() => {
+    sandbox = sinon.createSandbox();
     consoleLogStub = sandbox.stub(console, 'log');
+    rlp = {
+      default: {
+        createInterface() {
+          return {
+            questionAsync: sandbox.stub().resolves('123456'),
+          };
+        },
+      },
+    };
+    openStub = sandbox.stub();
+    close = sandbox.stub().resolves();
+    puppeteer = {
+      launch() {
+        return {
+          newPage() {
+            return {
+              goto: sandbox.stub().resolves(),
+              focus: sandbox.stub().resolves(),
+              keyboard: {
+                type: sandbox.stub().resolves(),
+              },
+              waitForNavigation: sandbox.stub().resolves(),
+              waitForSelector: sandbox.stub().resolves(),
+              click: sandbox.stub().resolves(),
+            };
+          },
+          close,
+        };
+      },
+    };
+    auth = proxyquire('../../lib/authenticate.js', {
+      open: openStub,
+      puppeteer,
+      'readline-promise': rlp,
+    });
   });
 
   after(() => {
@@ -40,6 +76,9 @@ describe('Authenticate Test Suite', () => {
 
     beforeEach(async () => {
       initStub.reset();
+      openStub.reset();
+      close.reset();
+      close.resolves();
     });
 
     it('should return a promise when called without a callback', async () => {
@@ -55,6 +94,63 @@ describe('Authenticate Test Suite', () => {
         consumerKey: '1234567890',
       });
 
+      expect(promise instanceof Promise).to.equal(true);
+    });
+
+    it('should use the puppeteer flow when uid and pw args exist', async () => {
+      const token = {
+        expires_in: 1800,
+        refresh_token: '',
+        access_token: '',
+      };
+
+      initStub.yields(null, token);
+      // hit else branch in oauth function
+      close.rejects('oops');
+
+      const promise = auth.authenticate({
+        consumerKey: '1234567890',
+        uid: 'pizza',
+        pw: 'cheese',
+      });
+
+      expect(openStub.callCount).to.equal(0);
+      expect(promise instanceof Promise).to.equal(true);
+    });
+
+    it('should not use the puppeteer flow when uid does not exist', async () => {
+      const token = {
+        expires_in: 1800,
+        refresh_token: '',
+        access_token: '',
+      };
+
+      initStub.yields(null, token);
+
+      const promise = auth.authenticate({
+        consumerKey: '1234567890',
+        pw: 'cheese',
+      });
+
+      expect(openStub.calledOnce).to.equal(true);
+      expect(promise instanceof Promise).to.equal(true);
+    });
+
+    it('should not use the puppeteer flow when pw does not exist', async () => {
+      const token = {
+        expires_in: 1800,
+        refresh_token: '',
+        access_token: '',
+      };
+
+      initStub.yields(null, token);
+
+      const promise = auth.authenticate({
+        consumerKey: '1234567890',
+        pw: 'cheese',
+      });
+
+      expect(openStub.calledOnce).to.equal(true);
       expect(promise instanceof Promise).to.equal(true);
     });
 
@@ -116,13 +212,14 @@ describe('Authenticate Test Suite', () => {
   });
 
   describe('init tests', () => {
-    let existsSyncStub; let
-      authenticate;
+    let existsSyncStub; let authenticate;
 
     before(() => {
       existsSyncStub = sandbox.stub();
 
       authenticate = proxyquire('../../lib/authenticate.js', {
+        puppeteer,
+        'readline-promise': rlp,
         fs: {
           existsSync: existsSyncStub,
           readFileSync() {
@@ -185,6 +282,8 @@ describe('Authenticate Test Suite', () => {
       existsSyncStub.returns(true);
 
       const { init } = proxyquire('../../lib/authenticate.js', {
+        puppeteer,
+        'readline-promise': rlp,
         fs: {
           existsSync: existsSyncStub,
           readFileSync() {
@@ -228,6 +327,8 @@ describe('Authenticate Test Suite', () => {
     before(() => {
       axiosStub = sandbox.stub();
       authenticate = proxyquire('../../lib/authenticate.js', {
+        puppeteer,
+        'readline-promise': rlp,
         axios: axiosStub,
       });
     });
@@ -292,6 +393,8 @@ describe('Authenticate Test Suite', () => {
     before(() => {
       axiosStub = sandbox.stub();
       authenticate = proxyquire('../../lib/authenticate.js', {
+        puppeteer,
+        'readline-promise': rlp,
         axios: axiosStub,
       });
     });
