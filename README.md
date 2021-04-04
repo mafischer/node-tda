@@ -10,6 +10,10 @@ Convenient library for [TDA REST API](https://developer.tdameritrade.com/apis).
 [![issues](https://img.shields.io/github/issues/mafischer/node-tda)](https://github.com/mafischer/node-tda/issues)
 [![issues](https://img.shields.io/github/stars/mafischer/node-tda?style=social)](https://github.com/mafischer/node-tda/stargazers)
 
+## Contributing
+
+Please review the [contributing](CONTRIBUTING.md) documentation.
+
 ## Prerequisites
 
 1. Follow these [instructions](https://developer.tdameritrade.com/content/getting-started) to create a tda developer account and app. Set your app redirect uri to `https://localhost:8443/`.
