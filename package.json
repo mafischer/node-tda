@@ -1,6 +1,6 @@
 {
   "name": "node-tda",
-  "version": "1.0.0-rc.5",
+  "version": "1.0.0",
   "description": "Library for accessing TDA Web API",
   "main": "lib/index.js",
   "bin": {
